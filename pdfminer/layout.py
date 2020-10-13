@@ -702,6 +702,18 @@ class LTLayoutContainer(LTContainer):
                 yield box
         return
 
+    def load_page_stencil(self, collision_plane):
+        """Override to add non-text objects defining page layout.
+
+        Text grouping will discourage forming groups
+        that overlap with the stencil items.
+
+        For example to enforce two-column layout, add a vertical LTLine item
+        between the columns. This will ensure that a single line of text,
+        spanning both columns  will NOT be formed.
+        """
+        pass
+
     def group_textboxes(self, laparams, boxes):
         """Group textboxes hierarchically.
 
@@ -760,6 +772,8 @@ class LTLayoutContainer(LTContainer):
 
         plane = Plane(self.bbox)
         plane.extend(boxes)
+
+        self.load_page_stencil(plane)
 
         done = set()
         while len(dists) > 0:
