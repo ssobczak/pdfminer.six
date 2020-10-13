@@ -760,12 +760,13 @@ class LTLayoutContainer(LTContainer):
 
         plane = Plane(self.bbox)
         plane.extend(boxes)
+
         done = set()
         while len(dists) > 0:
             (skip_isany, d, id1, id2, obj1, obj2) = heapq.heappop(dists)
             # Skip objects that are already merged
             if (id1 not in done) and (id2 not in done):
-                if skip_isany and isany(obj1, obj2):
+                if not skip_isany and isany(obj1, obj2):
                     heapq.heappush(dists, (True, d, id1, id2, obj1, obj2))
                     continue
                 if isinstance(obj1, (LTTextBoxVertical, LTTextGroupTBRL)) or \
